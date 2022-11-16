@@ -81,11 +81,13 @@ const editNoteByIdHandle = (request, h) => {
       updatedAt,
     };
 
+    const note = notes.filter((n) => n.id === id);
+
     const response = h.response({
       status: 'success',
       message: 'Catatan berhasil diupdate',
       data: {
-        notes,
+        note,
       },
     });
     response.code(200);
