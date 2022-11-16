@@ -111,7 +111,7 @@ const deletedByIdHandler = (request, h) => {
     return response;
   }
 
-  const response = h.request({
+  const response = h.response({
     status: 'fail',
     message: 'Catatan gagal dihapus. Id tidak ditemukan',
   });
