@@ -14,14 +14,14 @@ class NotesHandler {
     this.deleteNoteByIdHandler = this.deleteNoteByIdHandler.bind(this);
   }
 
-  postNoteHandler(request, h) {
+  async postNoteHandler(request, h) {
     try {
       // eslint-disable-next-line no-underscore-dangle
       this._validator.validateNotePayload(request.payload);
       const { title = 'untitled', body, tags } = request.payload;
 
       // eslint-disable-next-line no-underscore-dangle
-      const noteId = this._service.addNote({ title, body, tags });
+      const noteId = await this._service.addNote({ title, body, tags });
 
       const response = h.response({
         status: 'success',
@@ -52,9 +52,9 @@ class NotesHandler {
     }
   }
 
-  getNotesHandler() {
+  async getNotesHandler() {
     // eslint-disable-next-line no-underscore-dangle
-    const notes = this._service.getNotes();
+    const notes = await this._service.getNotes();
     return {
       status: 'success',
       data: {
@@ -63,11 +63,11 @@ class NotesHandler {
     };
   }
 
-  getNoteByIdHandler(request, h) {
+  async getNoteByIdHandler(request, h) {
     try {
       const { id } = request.params;
       // eslint-disable-next-line no-underscore-dangle
-      const note = this._service.getNoteById(id);
+      const note = await this._service.getNoteById(id);
       return {
         status: 'success',
         message: 'Catatan berhasil ditemukan',
@@ -95,13 +95,13 @@ class NotesHandler {
     }
   }
 
-  putNoteByIdHandler(request, h) {
+  async putNoteByIdHandler(request, h) {
     try {
       // eslint-disable-next-line no-underscore-dangle
       this._validator.validateNotePayload(request.payload);
       const { id } = request.params;
       // eslint-disable-next-line no-underscore-dangle
-      this._service.editNoteById(id, request.payload);
+      await this._service.editNoteById(id, request.payload);
       return {
         status: 'success',
         message: 'Catatan berhasil diperbarui',
@@ -125,11 +125,11 @@ class NotesHandler {
     }
   }
 
-  deleteNoteByIdHandler(request, h) {
+  async deleteNoteByIdHandler(request, h) {
     try {
       const { id } = request.params;
       // eslint-disable-next-line no-underscore-dangle
-      this._service.deleteNoteById(id);
+      await this._service.deleteNoteById(id);
 
       return {
         status: 'success',
