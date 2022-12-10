@@ -19,9 +19,15 @@ class NotesHandler {
       // eslint-disable-next-line no-underscore-dangle
       this._validator.validateNotePayload(request.payload);
       const { title = 'untitled', body, tags } = request.payload;
+      const { id: credentialId } = request.auth.credentials;
 
       // eslint-disable-next-line no-underscore-dangle
-      const noteId = await this._service.addNote({ title, body, tags });
+      const noteId = await this._service.addNote({
+        title,
+        body,
+        tags,
+        owner: credentialId,
+      });
 
       const response = h.response({
         status: 'success',
@@ -52,9 +58,10 @@ class NotesHandler {
     }
   }
 
-  async getNotesHandler() {
+  async getNotesHandler(request) {
+    const { id: credentialId } = request.auth.credentials;
     // eslint-disable-next-line no-underscore-dangle
-    const notes = await this._service.getNotes();
+    const notes = await this._service.getNotes(credentialId);
     return {
       status: 'success',
       data: {
@@ -66,6 +73,10 @@ class NotesHandler {
   async getNoteByIdHandler(request, h) {
     try {
       const { id } = request.params;
+      const { id: credentialId } = request.auth.credentials;
+
+      // eslint-disable-next-line no-underscore-dangle
+      await this._service.verifyNoteOwner(id, credentialId);
       // eslint-disable-next-line no-underscore-dangle
       const note = await this._service.getNoteById(id);
       return {
@@ -100,6 +111,10 @@ class NotesHandler {
       // eslint-disable-next-line no-underscore-dangle
       this._validator.validateNotePayload(request.payload);
       const { id } = request.params;
+      const { id: credentialId } = request.auth.credentials;
+
+      // eslint-disable-next-line no-underscore-dangle
+      await this._service.verifyNoteOwner(id, credentialId);
       // eslint-disable-next-line no-underscore-dangle
       await this._service.editNoteById(id, request.payload);
       return {
@@ -128,9 +143,12 @@ class NotesHandler {
   async deleteNoteByIdHandler(request, h) {
     try {
       const { id } = request.params;
+      const { id: credentialId } = request.auth.credentials;
+
+      // eslint-disable-next-line no-underscore-dangle
+      await this._service.verifyNoteOwner(id, credentialId);
       // eslint-disable-next-line no-underscore-dangle
       await this._service.deleteNoteById(id);
-
       return {
         status: 'success',
         message: 'Catatan berhasil dihapus',
