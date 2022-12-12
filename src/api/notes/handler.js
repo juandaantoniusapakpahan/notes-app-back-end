@@ -76,7 +76,7 @@ class NotesHandler {
       const { id: credentialId } = request.auth.credentials;
 
       // eslint-disable-next-line no-underscore-dangle
-      await this._service.verifyNoteOwner(id, credentialId);
+      await this._service.verifyNoteAccess(id, credentialId);
       // eslint-disable-next-line no-underscore-dangle
       const note = await this._service.getNoteById(id);
       return {
@@ -112,9 +112,8 @@ class NotesHandler {
       this._validator.validateNotePayload(request.payload);
       const { id } = request.params;
       const { id: credentialId } = request.auth.credentials;
-
       // eslint-disable-next-line no-underscore-dangle
-      await this._service.verifyNoteOwner(id, credentialId);
+      await this._service.verifyNoteAccess(id, credentialId);
       // eslint-disable-next-line no-underscore-dangle
       await this._service.editNoteById(id, request.payload);
       return {
