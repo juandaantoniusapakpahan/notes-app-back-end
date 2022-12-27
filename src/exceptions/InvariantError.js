@@ -4,7 +4,7 @@ class InvariantError extends ClientError {
   // eslint-disable-next-line no-useless-constructor
   constructor(message) {
     super(message);
-    this.name = 'IvariantError';
+    this.name = 'InvariantError';
   }
 }
 module.exports = InvariantError;
