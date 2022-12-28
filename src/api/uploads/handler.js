@@ -17,12 +17,13 @@ class UploadsHandler {
       this._validator.validateImageHeaders(data.hapi.headers);
 
       // eslint-disable-next-line no-underscore-dangle
-      const filename = await this._service.writeFile(data, data.hapi);
+      const fileLocation = await this._service.writeFile(data, data.hapi);
 
       const response = h.response({
         status: 'success',
         data: {
-          fileLocation: `http://${process.env.HOST}:${process.env.PORT}/upload/images/${filename}`,
+          fileLocation,
+          // fileLocation: `http://${process.env.HOST}:${process.env.PORT}/upload/images/${filename}`, Lokal Storage
         },
       });
       response.code(201);
