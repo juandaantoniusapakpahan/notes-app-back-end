@@ -1,5 +1,6 @@
 node_modules
 notes-api-webserver.pem
-Notes API Test.postman_collection.json
 .env
 .prod.env
+package-lock.json
+src/api/uploads/file
